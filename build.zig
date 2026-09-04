@@ -5,7 +5,6 @@ pub fn build(b: *std.Build) void {
     // build options
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
-    const tracy_path = b.option([]const u8, "tracy", "Path to tracy repo (enables profiling)");
 
     // client library
     const lib_client = b.addLibrary(.{
@@ -19,9 +18,11 @@ pub fn build(b: *std.Build) void {
     });
 
     // tracy sources
-    const tracy_public_path: LazyPath = .{
-        .cwd_relative = b.pathJoin(&.{ tracy_path orelse @panic("tracy"), "public" }),
-    };
+    const tracy = b.dependency("tracy", .{
+        .target = target,
+        .optimize = optimize,
+    });
+    const tracy_public_path = tracy.path("public");
     const cpp_flags = &[_][]const u8{
         "-std=c++23",
         "-Wall",
