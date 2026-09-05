@@ -1,5 +1,4 @@
 const std = @import("std");
-const LazyPath = std.Build.LazyPath;
 
 pub fn build(b: *std.Build) void {
     // build options
