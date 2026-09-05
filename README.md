@@ -1,4 +1,4 @@
-tracy profiler, packaged using zig.
+[tracy profiler](https://github.com/wolfpld/tracy/), packaged using zig.
 
 Exposes the tracy client as a zig package.
 
