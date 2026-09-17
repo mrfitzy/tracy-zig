@@ -45,13 +45,15 @@ pub fn build(b: *std.Build) void {
         .flags = cpp_flags,
     });
 
+    // target platform dependencies
+    if (target.result.os.tag == .windows) {
+        inline for (.{"dbghelp", "secur32", "ws2_32"}) |dep| {
+            lib_client.root_module.linkSystemLibrary(dep, .{ .use_pkg_config = .no });
+        }
+    }
+
     // install headers
-    const header_dirs = &[_][]const u8{
-        "client",
-        "common",
-        "tracy",
-    };
-    for (header_dirs) |dir| {
+    inline for (.{"client", "common", "tracy"}) |dir| {
         lib_client.installHeadersDirectory(tracy_public_path.path(b, dir), dir, .{ .include_extensions = &.{ ".h", ".hpp" } });
     }
 
